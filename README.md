@@ -37,3 +37,33 @@ Health: `GET /actuator/health`. Base de datos: H2 en memoria (se reinicia con el
 | `cloud` | Amazon RDS PostgreSQL, schema `catalog` | EC2 (`SPRING_PROFILES_ACTIVE=cloud`) |
 
 Variables del perfil `cloud`: `DB_HOST`, `DB_PORT` (5432), `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD`. En la EC2 se obtienen de SSM Parameter Store; nunca se guardan en el repo. El schema se crea al arrancar (`hibernate.hbm2ddl.create_namespaces`).
+
+## Ejemplos
+
+Directo al microservicio (local, sin token):
+
+```bash
+# catálogo completo (7 ítems)
+curl http://localhost:8083/api/catalog/services
+
+# solo repuestos (el filtro no distingue mayúsculas)
+curl "http://localhost:8083/api/catalog/services?tipo=repuesto"
+
+# detalle de un ítem; un id inexistente devuelve 404
+curl http://localhost:8083/api/catalog/services/1
+```
+
+Respuesta de ejemplo:
+
+```json
+{ "id": 1, "nombre": "Cambio de tablero eléctrico", "tipo": "SERVICIO", "stock": 12, "tarifa": 45000 }
+```
+
+A través del API Gateway (roles Admin o Supervisor):
+
+```bash
+curl -H "Authorization: Bearer $TOKEN" \
+  https://7s6qn2mb8h.execute-api.us-east-1.amazonaws.com/api/catalog/services?tipo=SERVICIO
+```
+
+Sin token el gateway responde 401; con un rol sin permiso (Cliente, Auditor) el BFF responde 403.
