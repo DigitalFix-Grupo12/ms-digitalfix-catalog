@@ -39,6 +39,14 @@ class CatalogControllerTest {
     }
 
     @Test
+    void filtraPorTipoServicio() throws Exception {
+        mockMvc.perform(get("/api/catalog/services").param("tipo", "SERVICIO"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(4)))
+            .andExpect(jsonPath("$[*].tipo", everyItem(is("SERVICIO"))));
+    }
+
+    @Test
     void itemInexistenteDevuelve404() throws Exception {
         mockMvc.perform(get("/api/catalog/services/9999"))
             .andExpect(status().isNotFound());
