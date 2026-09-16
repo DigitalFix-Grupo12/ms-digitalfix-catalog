@@ -1,5 +1,7 @@
 # ms-digitalfix-catalog (puerto 8083)
 
+[![CI](https://github.com/DigitalFix-Grupo12/ms-digitalfix-catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/DigitalFix-Grupo12/ms-digitalfix-catalog/actions/workflows/ci.yml)
+
 Catalogo de servicios tecnicos y repuestos (JPA + H2, datos semilla).
 
 | Metodo | Ruta | Descripcion |
